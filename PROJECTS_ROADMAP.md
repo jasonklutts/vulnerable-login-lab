@@ -38,7 +38,7 @@ Hands-on cybersecurity projects to demonstrate practical SOC analyst capabilitie
 
 ## Log Analysis & SIEM
 
-- [ ] **Failed Login Analyzer**
+- [ ] **Failed Login Analyzer** ⭐ NEXT
   - Parses auth.log or Windows Event logs
   - Identifies brute force patterns and suspicious source IPs
   - Outputs IOCs for blocking
@@ -50,11 +50,7 @@ Hands-on cybersecurity projects to demonstrate practical SOC analyst capabilitie
   - Identifies multi-stage attack patterns
   - Skills: Log correlation, incident investigation, multi-source analysis
 
-- [ ] **Syslog Parser with Alert Rules**
-  - Monitors live syslog feed for configurable keywords
-  - Triggers alerts on suspicious patterns
-  - Sends notifications via email or webhook
-  - Skills: Real-time monitoring, alert configuration, automation
+- [x] ~~**Syslog Parser with Alert Rules**~~ - Redundant with ELK Stack project
 
 ---
 
@@ -88,17 +84,9 @@ Hands-on cybersecurity projects to demonstrate practical SOC analyst capabilitie
   - Outputs timeline and artifact package
   - Skills: Incident response, forensic collection, evidence preservation
 
-- [ ] **Alert Triage Dashboard**
-  - Web interface for queued security alerts
-  - Categorization: true positive, false positive, needs investigation
-  - Tracks MTTD and MTTR metrics
-  - Skills: Alert triage, workflow management, metrics tracking
+- [x] ~~**Alert Triage Dashboard**~~ - Redundant with SOC Dashboards project
 
-- [ ] **Process Monitor with Baseline Comparison**
-  - Captures running processes and compares to known-good baseline
-  - Flags new or suspicious processes
-  - Checks hashes against VirusTotal API
-  - Skills: Host-based detection, baseline comparison, threat analysis
+- [x] ~~**Process Monitor with Baseline Comparison**~~ - Redundant with Adversary Simulation Lab
 
 ---
 
@@ -124,22 +112,70 @@ Hands-on cybersecurity projects to demonstrate practical SOC analyst capabilitie
 
 ---
 
-## Priority Order (Recommended)
+## Recommended Build Order
 
-### Quick Wins (Start Here)
-1. Failed Login Analyzer - Complements existing vulnerable login app
-2. Port Scanner with Service Detection - Classic SOC reconnaissance tool
-3. Domain Reputation Checker - Immediate threat intel value
+### Phase 1: Quick Wins & Skill Diversification (Weeks 1-2)
 
-### Medium Priority
-4. Web Application Header Scanner - Quick security audit tool
-5. IOC Checker Against Live Systems - Practical threat detection
-6. Automated Evidence Collection Script - Core IR capability
+**Priority projects that complement existing portfolio:**
 
-### Advanced Projects
-7. Log Correlation Script - More complex multi-source analysis
-8. Alert Triage Dashboard - Full web application build
-9. Network Baseline Monitor - Requires extended data collection
+1. **Failed Login Analyzer** ⭐ NEXT
+   - Extends vulnerable login app work
+   - New skill: Windows Event Log parsing
+   - Direct SOC triage application
+   - Est. time: 2-3 hours
+
+2. **Domain Reputation Checker**
+   - Threat intelligence focus (new area)
+   - WHOIS, DNS analysis, API integration
+   - Phishing detection capability
+   - Est. time: 3-4 hours
+
+3. **Port Scanner with Service Detection**
+   - Classic reconnaissance tool
+   - Socket programming, banner grabbing
+   - Network enumeration skills
+   - Est. time: 2-3 hours
+
+### Phase 2: Threat Intelligence Focus (Weeks 3-4)
+
+4. **Automated Threat Feed Aggregator**
+   - Proactive threat hunting
+   - API integration, data normalization
+   - Threat intel lifecycle demonstration
+   - Est. time: 4-5 hours
+
+5. **IOC Checker Against Live Systems**
+   - Applies threat intel to infrastructure
+   - Cross-references IOCs with logs
+   - Practical detection capability
+   - Est. time: 3-4 hours
+
+### Phase 3: Advanced Analysis Tools (Weeks 5-6)
+
+6. **Web Application Header Scanner**
+   - OWASP Top 10 knowledge
+   - HTTP security headers, secure config
+   - Quick security audit capability
+   - Est. time: 2-3 hours
+
+7. **Automated Evidence Collection Script**
+   - Incident response focus
+   - Forensic artifact collection
+   - Shows IR readiness
+   - Est. time: 4-5 hours
+
+8. **Log Correlation Script**
+   - Advanced multi-source analysis
+   - Timeline correlation
+   - Investigation methodology
+   - Est. time: 5-6 hours
+
+### Projects Skipped
+
+**Redundant with existing portfolio projects:**
+- ~~Process Monitor with Baseline Comparison~~ - Covered by Adversary Simulation Lab
+- ~~Alert Triage Dashboard~~ - Covered by SOC Dashboards with ELK Stack
+- ~~Syslog Parser with Alert Rules~~ - Covered by ELK Stack implementation
 
 ---
 
@@ -147,13 +183,26 @@ Hands-on cybersecurity projects to demonstrate practical SOC analyst capabilitie
 
 | Project | Python | Web Dev | Network | Logs | Threat Intel | IR |
 |---------|--------|---------|---------|------|--------------|-----|
-| Vulnerable Login App | ✓ | ✓ | | ✓ | | |
-| Port Scanner | ✓ | | ✓ | | | |
+| Vulnerable Login App ✓ | ✓ | ✓ | | ✓ | | |
 | Failed Login Analyzer | ✓ | | | ✓ | | |
 | Domain Reputation | ✓ | | | | ✓ | |
+| Port Scanner | ✓ | | ✓ | | | |
+| Threat Feed Aggregator | ✓ | | | | ✓ | |
+| IOC Checker | ✓ | | | ✓ | ✓ | |
+| Header Scanner | ✓ | ✓ | | | | |
 | Evidence Collection | ✓ | | | | | ✓ |
-| Alert Triage Dashboard | ✓ | ✓ | | ✓ | | |
-| IOC Checker | ✓ | | | | ✓ | |
+| Log Correlation | ✓ | | | ✓ | | ✓ |
+
+---
+
+## Repository Structure
+
+Each project will have its own GitHub repository with:
+- Detailed README with usage instructions
+- Complete source code with comments
+- Sample output and screenshots
+- Documentation of lessons learned
+- Links from jasonklutts.com portfolio
 
 ---
 
@@ -162,7 +211,8 @@ Hands-on cybersecurity projects to demonstrate practical SOC analyst capabilitie
 - All projects include full documentation and source code
 - Each demonstrates hands-on SOC analyst capabilities
 - Projects are designed to be portfolio-ready
-- Code will be hosted on GitHub with detailed README files
+- Code hosted on GitHub with detailed README files
 - Live demos hosted where applicable on jasonklutts.com
+- Projects focus on filling skill gaps not covered by existing portfolio
 
-**Last Updated:** February 2026
+**Last Updated:** February 9, 2026
