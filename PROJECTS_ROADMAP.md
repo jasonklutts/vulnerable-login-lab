@@ -38,11 +38,12 @@ Hands-on cybersecurity projects to demonstrate practical SOC analyst capabilitie
 
 ## Log Analysis & SIEM
 
-- [ ] **Failed Login Analyzer** ⭐ NEXT
-  - Parses auth.log or Windows Event logs
-  - Identifies brute force patterns and suspicious source IPs
-  - Outputs IOCs for blocking
-  - Skills: Log parsing, pattern recognition, IOC generation
+- [x] **Failed Login Analyzer** (February 2026)
+  - Python CLI tool parsing auth.log for brute force detection
+  - Threshold-based detection with configurable parameters
+  - Multiple output formats: text reports, JSON for SIEM, IOC lists
+  - Demonstrates: Log parsing, regex, detection logic, CLI design
+  - Code: [GitHub](https://github.com/jasonklutts/failed-login-analyzer)
 
 - [ ] **Log Correlation Script**
   - Ingests logs from multiple sources (firewall, IDS, auth)
