@@ -27,6 +27,4 @@ Run log analysis:
 ```bash
 python3 analyze_logs.py
 ```
-
-## ⚠️ Warning
-This is an intentionally vulnerable application for educational purposes only. Do not use in production.
+This is an intentionally vulnerable application for educational purposes only. 
