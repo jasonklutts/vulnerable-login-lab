@@ -2,6 +2,15 @@
 
 Hands-on cybersecurity projects to demonstrate practical SOC analyst capabilities. Each project takes 2-4 hours and focuses on real-world security operations skills.
 
+- [x] **Malicious PDF Analyzer** (February 2026)
+  - Python tool using pdfid to detect malicious PDF indicators
+  - Identifies JavaScript, auto-open actions, embedded files
+  - Risk scoring with detailed explanations
+  - Runs on Kali Linux for isolated analysis
+  - Demonstrates: Malware analysis, document forensics, static analysis
+  - Code: [GitHub](https://github.com/jasonklutts/pdf-analyzer)
+
+
 ## Completed Projects
 
 - [x] **Vulnerable Login Application with Interactive Dashboard** (February 2026)
@@ -16,11 +25,12 @@ Hands-on cybersecurity projects to demonstrate practical SOC analyst capabilitie
 
 ## Network Analysis & Monitoring
 
-- [ ] **Port Scanner with Service Detection**
-  - Python script scanning target IPs for open ports
-  - Identifies running services and versions
-  - JSON output for SIEM ingestion
-  - Skills: Network reconnaissance, service enumeration, Python scripting
+- [x] **Port Scanner with Service Detection** (February 2026)
+  - Python TCP scanner with concurrent threading
+  - Banner grabbing for service/version detection
+  - Top 20/100 port presets and custom ranges
+  - Demonstrates: Network reconnaissance, socket programming, threading
+  - Code: [GitHub](https://github.com/jasonklutts/port-scanner) 
 
 - [ ] **Packet Capture Analysis Automation**
   - Reads PCAP files and extracts suspicious indicators
