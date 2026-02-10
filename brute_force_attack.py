@@ -92,11 +92,17 @@ def run_brute_force():
     print("=" * 60)
 
 if __name__ == '__main__':
-    print("\n⚠️  WARNING: This is for educational purposes on YOUR OWN infrastructure only\n")
+    import sys
     
-    response = input("Continue with attack simulation? (yes/no): ")
-    
-    if response.lower() == 'yes':
+    # Check if running with --auto flag (for dashboard)
+    if len(sys.argv) > 1 and sys.argv[1] == '--auto':
         run_brute_force()
     else:
-        print("Attack cancelled.")
+        print("\n⚠️  WARNING: This is for educational purposes on YOUR OWN infrastructure only\n")
+        
+        response = input("Continue with attack simulation? (yes/no): ")
+        
+        if response.lower() == 'yes':
+            run_brute_force()
+        else:
+            print("Attack cancelled.")

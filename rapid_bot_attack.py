@@ -90,13 +90,19 @@ def run_rapid_attack(num_attempts=30):
     print("=" * 60)
 
 if __name__ == '__main__':
-    print("\n⚠️  WARNING: This is for educational purposes on YOUR OWN infrastructure only\n")
-    print("This simulates a high-speed automated bot attack")
-    print()
+    import sys
     
-    response = input("Continue with rapid attack simulation? (yes/no): ")
-    
-    if response.lower() == 'yes':
+    # Check if running with --auto flag (for dashboard)
+    if len(sys.argv) > 1 and sys.argv[1] == '--auto':
         run_rapid_attack(30)
     else:
-        print("Attack cancelled.")
+        print("\n⚠️  WARNING: This is for educational purposes on YOUR OWN infrastructure only\n")
+        print("This simulates a high-speed automated bot attack")
+        print()
+        
+        response = input("Continue with rapid attack simulation? (yes/no): ")
+        
+        if response.lower() == 'yes':
+            run_rapid_attack(30)
+        else:
+            print("Attack cancelled.")

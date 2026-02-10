@@ -90,13 +90,19 @@ def run_credential_stuffing():
     print("=" * 60)
 
 if __name__ == '__main__':
-    print("\n⚠️  WARNING: This is for educational purposes on YOUR OWN infrastructure only\n")
-    print("This simulates credential stuffing using breach data")
-    print()
+    import sys
     
-    response = input("Continue with attack simulation? (yes/no): ")
-    
-    if response.lower() == 'yes':
+    # Check if running with --auto flag (for dashboard)
+    if len(sys.argv) > 1 and sys.argv[1] == '--auto':
         run_credential_stuffing()
     else:
-        print("Attack cancelled.")
+        print("\n⚠️  WARNING: This is for educational purposes on YOUR OWN infrastructure only\n")
+        print("This simulates credential stuffing using breach data")
+        print()
+        
+        response = input("Continue with attack simulation? (yes/no): ")
+        
+        if response.lower() == 'yes':
+            run_credential_stuffing()
+        else:
+            print("Attack cancelled.")

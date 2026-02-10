@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attack Simulation Dashboard - Jason Klutts</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        /* Dashboard-specific styles matching portfolio aesthetic */
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+        
+        .dashboard-header {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+        
+        .dashboard-title {
+            margin: 0 0 0.5rem;
+            font-size: 2rem;
+            letter-spacing: -0.02em;
+        }
+        
+        .dashboard-subtitle {
+            margin: 0;
+            color: var(--muted);
+            font-size: 1.1rem;
+        }
+        
+        .warning-banner {
+            background: #fff8e1;
+            border: 2px solid #ffc107;
+            border-radius: var(--radius);
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            text-align: center;
+            color: #856404;
+        }
+        
+        .warning-banner strong {
+            color: #856404;
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .dashboard-panel {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+        }
+        
+        .panel-header {
+            margin: 0 0 1.5rem;
+            font-size: 1.5rem;
+            color: var(--text);
+            font-weight: 700;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 0.75rem;
+        }
+        
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .attack-button {
+            background: var(--card);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 1.25rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+            font-family: inherit;
+            width: 100%;
+        }
+        
+        .attack-button:hover:not(:disabled) {
+            border-color: var(--link);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        .attack-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .attack-button.running {
+            border-color: var(--link);
+            background: #eff6ff;
+        }
+        
+        .button-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+        }
+        
+        .button-description {
+            font-size: 0.9rem;
+            color: var(--muted);
+        }
+        
+        .button-status {
+            font-size: 0.85rem;
+            color: var(--link);
+            margin-top: 0.5rem;
+            font-weight: 600;
+        }
+        
+        .utility-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .utility-button {
+            background: var(--card);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            font-weight: 600;
+            color: var(--text);
+        }
+        
+        .utility-button:hover {
+            border-color: var(--link);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        .utility-button.analyze {
+            border-color: var(--link);
+            color: var(--link);
+        }
+        
+        .utility-button.clear {
+            border-color: #dc3545;
+            color: #dc3545;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+        
+        .stat-card {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.25rem;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--link);
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--muted);
+            font-weight: 600;
+        }
+        
+        .time-range {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: var(--bg);
+            border-radius: 8px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--muted);
+        }
+        
+        .logs-viewer {
+            background: #1f2937;
+            border-radius: 8px;
+            padding: 1rem;
+            max-height: 450px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            color: #e5e7eb;
+        }
+        
+        .log-entry {
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 3px solid var(--link);
+            border-radius: 4px;
+            line-height: 1.6;
+        }
+        
+        .log-entry:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+        
+        .log-placeholder {
+            text-align: center;
+            color: #9ca3af;
+            padding: 2rem;
+        }
+        
+        .list-container {
+            background: var(--bg);
+            border-radius: 8px;
+            padding: 1rem;
+            max-height: 350px;
+            overflow-y: auto;
+        }
+        
+        .list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+        }
+        
+        .list-item:hover {
+            border-color: var(--link);
+        }
+        
+        .list-label {
+            font-weight: 600;
+            color: var(--text);
+        }
+        
+        .list-badge {
+            background: var(--link);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        
+        .alert-item {
+            border-color: #dc3545;
+            background: #fff5f5;
+        }
+        
+        .alert-badge {
+            background: #dc3545;
+        }
+        
+        .status-message {
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        .status-success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 2px solid #10b981;
+        }
+        
+        .status-error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 2px solid #dc3545;
+        }
+        
+        .dashboard-footer {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            text-align: center;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .footer-links a {
+            font-weight: 600;
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .utility-buttons {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <h1 class="dashboard-title">Attack Simulation Dashboard</h1>
+            <p class="dashboard-subtitle">Intentionally Vulnerable Login Application - Educational Testing Environment</p>
+        </div>
+        
+        <div class="warning-banner">
+            <strong>WARNING:</strong> This dashboard triggers real attack simulations against this application. 
+            For educational and demonstration purposes only.
+        </div>
+        
+        <div class="dashboard-grid">
+            <!-- Attack Controls -->
+            <div class="dashboard-panel">
+                <h2 class="panel-header">Attack Simulations</h2>
+                <div class="button-group">
+                    <button class="attack-button" id="btn-brute-force" onclick="triggerAttack('brute_force')">
+                        <div class="button-title">Brute Force Attack</div>
+                        <div class="button-description">15 password attempts against admin user</div>
+                    </button>
+                    
+                    <button class="attack-button" id="btn-credential-stuffing" onclick="triggerAttack('credential_stuffing')">
+                        <div class="button-title">Credential Stuffing</div>
+                        <div class="button-description">15 username/password pairs from breach data</div>
+                    </button>
+                    
+                    <button class="attack-button" id="btn-rapid-bot" onclick="triggerAttack('rapid_bot')">
+                        <div class="button-title">Rapid Bot Attack</div>
+                        <div class="button-description">30 high-speed random attempts</div>
+                    </button>
+                </div>
+                
+                <div class="utility-buttons">
+                    <button class="utility-button analyze" onclick="runAnalysis()">Analyze Logs</button>
+                    <button class="utility-button clear" onclick="clearLogs()">Clear Logs</button>
+                </div>
+                
+                <div id="status-message"></div>
+            </div>
+            
+            <!-- Live Statistics -->
+            <div class="dashboard-panel">
+                <h2 class="panel-header">Live Statistics</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value" id="total-attempts">0</div>
+                        <div class="stat-label">Total Attempts</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="unique-ips">0</div>
+                        <div class="stat-label">Unique IPs</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="unique-users">0</div>
+                        <div class="stat-label">Usernames Tried</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="brute-force-count">0</div>
+                        <div class="stat-label">Brute Force IPs</div>
+                    </div>
+                </div>
+                
+                <div class="time-range" id="time-range">No data yet</div>
+            </div>
+        </div>
+        
+        <!-- Live Logs -->
+        <div class="dashboard-panel">
+            <h2 class="panel-header">Live Login Attempts (Last 50)</h2>
+            <div class="logs-viewer" id="logs-container">
+                <div class="log-placeholder">Waiting for login attempts...</div>
+            </div>
+        </div>
+        
+        <!-- Analysis Results -->
+        <div class="dashboard-grid" id="analysis-section" style="display: none;">
+            <div class="dashboard-panel">
+                <h2 class="panel-header">Top Source IPs</h2>
+                <div class="list-container" id="top-ips">
+                    <div class="log-placeholder">Run analysis to see results</div>
+                </div>
+            </div>
+            
+            <div class="dashboard-panel">
+                <h2 class="panel-header">Most Attempted Usernames</h2>
+                <div class="list-container" id="top-usernames">
+                    <div class="log-placeholder">Run analysis to see results</div>
+                </div>
+            </div>
+            
+            <div class="dashboard-panel">
+                <h2 class="panel-header">Brute Force Detection</h2>
+                <div class="list-container" id="brute-force-ips">
+                    <div class="log-placeholder">Run analysis to see results</div>
+                </div>
+            </div>
+            
+            <div class="dashboard-panel">
+                <h2 class="panel-header">Common Password Patterns</h2>
+                <div class="list-container" id="top-passwords">
+                    <div class="log-placeholder">Run analysis to see results</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="dashboard-footer">
+            <div class="footer-links">
+                <a href="/lab">Back to Login Page</a>
+                <a href="https://jasonklutts.com">Portfolio</a>
+                <a href="https://github.com/jasonklutts/vulnerable-login-lab">GitHub Repository</a>
+            </div>
+            <p style="color: var(--muted); font-size: 0.9rem;">
+                Jason Klutts - Security+ Certified | Cybersecurity Portfolio Project
+            </p>
+        </div>
+    </div>
+    
+    <script>
+        // Auto-refresh logs every 3 seconds
+        setInterval(loadLogs, 3000);
+        
+        // Load logs on page load
+        window.onload = function() {
+            loadLogs();
+        };
+        
+        function showStatus(message, type) {
+            const statusDiv = document.getElementById('status-message');
+            statusDiv.innerHTML = `<div class="status-message status-${type}">${message}</div>`;
+            setTimeout(() => {
+                statusDiv.innerHTML = '';
+            }, 5000);
+        }
+        
+        function triggerAttack(attackType) {
+            const btnId = `btn-${attackType.replace('_', '-')}`;
+            const btn = document.getElementById(btnId);
+            
+            const originalHTML = btn.innerHTML;
+            btn.disabled = true;
+            btn.classList.add('running');
+            btn.innerHTML = originalHTML + '<div class="button-status">Running...</div>';
+            
+            fetch(`/lab/api/trigger-attack/${attackType}`, {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    showStatus(`${attackType.replace('_', ' ')} attack started successfully`, 'success');
+                    
+                    // Re-enable button after estimated completion time
+                    setTimeout(() => {
+                        btn.disabled = false;
+                        btn.classList.remove('running');
+                        btn.innerHTML = originalHTML;
+                        loadLogs(); // Refresh logs
+                    }, 30000);
+                } else {
+                    showStatus(`Error: ${data.message}`, 'error');
+                    btn.disabled = false;
+                    btn.classList.remove('running');
+                    btn.innerHTML = originalHTML;
+                }
+            })
+            .catch(error => {
+                showStatus(`Network error: ${error}`, 'error');
+                btn.disabled = false;
+                btn.classList.remove('running');
+                btn.innerHTML = originalHTML;
+            });
+        }
+        
+        function loadLogs() {
+            fetch('/lab/api/logs')
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success' && data.logs.length > 0) {
+                    const logsContainer = document.getElementById('logs-container');
+                    logsContainer.innerHTML = '';
+                    
+                    // Reverse to show newest first
+                    data.logs.reverse().forEach(log => {
+                        const logDiv = document.createElement('div');
+                        logDiv.className = 'log-entry';
+                        logDiv.innerHTML = `
+                            <strong>${log.timestamp}</strong> | 
+                            IP: <span style="color: #60a5fa;">${log.ip}</span> | 
+                            User: <span style="color: #fbbf24;">${log.username}</span> | 
+                            Pass: <span style="color: #f87171;">${log.password}</span>
+                        `;
+                        logsContainer.appendChild(logDiv);
+                    });
+                    
+                    // Update quick stats
+                    updateQuickStats(data.logs);
+                }
+            })
+            .catch(error => console.error('Error loading logs:', error));
+        }
+        
+        function updateQuickStats(logs) {
+            const uniqueIPs = new Set(logs.map(log => log.ip)).size;
+            document.getElementById('unique-ips').textContent = uniqueIPs;
+            
+            const uniqueUsers = new Set(logs.map(log => log.username)).size;
+            document.getElementById('unique-users').textContent = uniqueUsers;
+            
+            document.getElementById('total-attempts').textContent = logs.length;
+        }
+        
+        function runAnalysis() {
+            showStatus('Running analysis...', 'success');
+            
+            fetch('/lab/api/analysis')
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success' && data.data) {
+                    displayAnalysisResults(data.data);
+                    showStatus('Analysis complete', 'success');
+                } else {
+                    showStatus('No data to analyze', 'error');
+                }
+            })
+            .catch(error => {
+                showStatus(`Error: ${error}`, 'error');
+            });
+        }
+        
+        function displayAnalysisResults(data) {
+            document.getElementById('analysis-section').style.display = 'grid';
+            
+            document.getElementById('total-attempts').textContent = data.total_attempts || 0;
+            document.getElementById('brute-force-count').textContent = data.brute_force_ips.length || 0;
+            
+            if (data.first_attempt && data.last_attempt) {
+                document.getElementById('time-range').textContent = 
+                    `First: ${data.first_attempt} | Last: ${data.last_attempt}`;
+            }
+            
+            const topIPsDiv = document.getElementById('top-ips');
+            topIPsDiv.innerHTML = '';
+            data.top_ips.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'list-item';
+                div.innerHTML = `
+                    <span class="list-label">${item.ip}</span>
+                    <span class="list-badge">${item.count} attempts</span>
+                `;
+                topIPsDiv.appendChild(div);
+            });
+            
+            const topUsersDiv = document.getElementById('top-usernames');
+            topUsersDiv.innerHTML = '';
+            data.top_usernames.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'list-item';
+                div.innerHTML = `
+                    <span class="list-label">${item.username}</span>
+                    <span class="list-badge">${item.count} attempts</span>
+                `;
+                topUsersDiv.appendChild(div);
+            });
+            
+            const bruteForceDiv = document.getElementById('brute-force-ips');
+            if (data.brute_force_ips.length > 0) {
+                bruteForceDiv.innerHTML = '';
+                data.brute_force_ips.forEach(item => {
+                    const div = document.createElement('div');
+                    div.className = 'list-item alert-item';
+                    div.innerHTML = `
+                        <span class="list-label">${item.ip}</span>
+                        <span class="list-badge alert-badge">${item.count} attempts</span>
+                    `;
+                    bruteForceDiv.appendChild(div);
+                });
+            } else {
+                bruteForceDiv.innerHTML = '<div class="log-placeholder">No brute force patterns detected</div>';
+            }
+            
+            const topPasswordsDiv = document.getElementById('top-passwords');
+            topPasswordsDiv.innerHTML = '';
+            data.top_passwords.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'list-item';
+                div.innerHTML = `
+                    <span class="list-label">${item.password}</span>
+                    <span class="list-badge">${item.count} attempts</span>
+                `;
+                topPasswordsDiv.appendChild(div);
+            });
+        }
+        
+        function clearLogs() {
+            if (!confirm('Are you sure you want to clear all logs? This cannot be undone.')) {
+                return;
+            }
+            
+            fetch('/lab/api/clear-logs', {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    showStatus('Logs cleared successfully', 'success');
+                    setTimeout(() => location.reload(), 1000);
+                } else {
+                    showStatus(`Error: ${data.message}`, 'error');
+                }
+            })
+            .catch(error => {
+                showStatus(`Error: ${error}`, 'error');
+            });
+        }
+    </script>
+</body>
+</html>
