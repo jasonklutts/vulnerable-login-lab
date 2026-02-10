@@ -69,11 +69,14 @@ Hands-on cybersecurity projects to demonstrate practical SOC analyst capabilitie
   - Daily updates with historical tracking
   - Skills: Threat intelligence, API integration, data processing
 
-- [ ] **Domain Reputation Checker**
-  - Analyzes domains for age, SSL status, DNS records
-  - Checks against threat intelligence sources
-  - Flags newly registered or suspicious domains
-  - Skills: Phishing detection, OSINT, domain analysis
+- [x] **Domain Reputation Checker** (February 2026)
+  - Python tool analyzing domains for phishing indicators
+  - WHOIS lookup, DNS resolution, SSL validation, security headers
+  - Risk scoring algorithm (0-100) with threat classification
+  - Web interface with live demo
+  - Demonstrates: Threat intelligence, OSINT, API integration, Flask
+  - Live demo: [jasonklutts.com/lab/domain-checker](https://jasonklutts.com/lab/domain-checker)
+  - Code: [GitHub](https://github.com/jasonklutts/domain-reputation-checker)
 
 ---
 
